@@ -13,7 +13,6 @@ load_dotenv()
 api_id = int(os.getenv('API_ID'))            # API ID Anda
 api_hash = os.getenv('API_HASH')             # API Hash Anda
 phone_number = os.getenv('PHONE_NUMBER')     # Nomor Telepon Anda
-bot_token = os.getenv('BOT_TOKEN')           # Bot Token jika menggunakan bot
 owner_id = int(os.getenv('OWNER_ID'))        # ID Telegram Anda
 ALLOWED_GROUP_IDS = [int(group_id) for group_id in os.getenv('ALLOWED_GROUP_IDS').split(',')]  # ID Grup yang diizinkan (sekarang list)
 
@@ -22,15 +21,10 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 logger = logging.getLogger()
 
 # Inisialisasi session
-client = None
+client = TelegramClient('my_session', api_id, api_hash)
 
-# Pilih mode login
-if bot_token:
-    # Login menggunakan bot token
-    client = TelegramClient('my_session', api_id, api_hash).start(bot_token=bot_token)
-else:
-    # Login menggunakan nomor telepon
-    client = TelegramClient('my_session', api_id, api_hash)
+# Mulai sesi login menggunakan nomor telepon
+client.start(phone_number)
 
 # Variabel untuk mencatat jumlah chat hari ini
 chat_count = 0
@@ -185,5 +179,4 @@ async def check_user_info(event):
         await event.respond(f"Terjadi kesalahan saat memproses perintah: {str(e)}")
 
 # Jalankan bot
-client.start(phone_number)
 client.run_until_disconnected()
