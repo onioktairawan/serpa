@@ -89,17 +89,17 @@ async def respond_to_keywords(event):
                         photo_url = "https://i.pinimg.com/236x/1f/c8/24/1fc8244a27f7665e2d694a44665a4d83.jpg"
                         await event.reply(file=photo_url)  # Menggunakan reply untuk membalas pesan yang berisi kata kunci
                     elif keyword == 'naik':
-                        await event.reply("NAIK ANJING AJA NAIK ANJING")
+                        await event.reply("*NAIK ANJING AJA NAIK ANJING*")
                     elif keyword == 'ser':
-                        await event.reply("APA, KANGEN SAMA SERPA YA")
+                        await event.reply("*APA, KANGEN SAMA SERPA YA*")
                     elif keyword == 'ok':
-                        await event.reply("OK")
+                        await event.reply("*OK*")
                     elif keyword == 'pc':
-                        await event.reply("MINIMAL CAKEP BARU PC PC")
+                        await event.reply("*MINIMAL CAKEP BARU PC PC*")
                     elif keyword == 'cpc':
-                        await event.reply("MINIMAL CAKEP BARU PC PC")
+                        await event.reply("*MINIMAL CAKEP BARU PC PC*")
                     elif keyword == 'oke':
-                        await event.reply("OK")
+                        await event.reply("*OK*")
                     logger.info(f"Respons berhasil dikirim untuk kata kunci '{keyword}'.")
     except Exception as e:
         logger.error(f"Terjadi kesalahan saat merespons kata kunci: {e}", exc_info=True)
@@ -113,7 +113,7 @@ async def rank(event):
             # Sort user berdasarkan jumlah chat mereka
             sorted_users = sorted(user_chat_count.items(), key=lambda item: item[1], reverse=True)
 
-            rank_message = "```**Ranking Pengirim Pesan Hari Ini:**\n\n"
+            rank_message = "*Ranking Pengirim Pesan Hari Ini:*\n\n"
             for idx, (user_id, message_count) in enumerate(sorted_users, 1):
                 user = await client.get_entity(user_id)
                 # Cek apakah user memiliki username, jika tidak tampilkan nama depan dan belakang
@@ -122,8 +122,8 @@ async def rank(event):
                 else:
                     username = f"{user.first_name} {user.last_name if user.last_name else ''}".strip() or "Tidak ada nama"
 
-                rank_message += f"{idx}. {username} - {message_count} pesan\n"
-            rank_message += "```"
+                rank_message += f"{idx}. *{username}* - {message_count} pesan\n"
+            rank_message += "\n"
 
             await event.respond(rank_message)
             logger.info(f"Informasi ranking berhasil dikirim ke {event.sender_id}")
@@ -154,19 +154,17 @@ async def check_user_info(event):
             chat_id = event.chat.id
 
             info_message = (
-                f"```"
                 f"**INFORMASI PENGGUNA:**\n\n"
-                f"GRUB:\n"
+                f"*GRUP:*\n"
                 f"  title       : {chat_title}\n"
                 f"  type        : {event.chat.__class__.__name__}\n"
                 f"  username    : {chat_username}\n"
                 f"  ID          : {chat_id}\n\n"
-                f"YOU:\n"
+                f"*ANDA:*\n"
                 f"  first name  : {user.first_name}\n"
                 f"  last name   : {user.last_name or '-'}\n"
                 f"  username    : {username}\n"
                 f"  ID          : {user_id}\n"
-                f"```"
             )
             await event.respond(info_message)
             logger.info(f"Informasi pengguna dikirim ke {event.sender_id}")
