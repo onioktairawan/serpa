@@ -1,0 +1,271 @@
+Telegram Bot Installation Guide
+Prerequisites
+Sebelum memulai, pastikan bahwa Anda sudah memiliki hal-hal berikut:
+
+Ubuntu (direkomendasikan untuk menggunakan versi terbaru)
+Python 3.8 atau lebih baru
+pip (Python package manager)
+Telegram API ID dan API Hash
+Nomor Telepon Telegram (untuk login menggunakan nomor HP) atau Bot Token (untuk login menggunakan bot)
+File .env untuk konfigurasi
+Step 1: Install Dependencies
+Perbarui sistem Ubuntu:
+
+bash
+Copy
+Edit
+sudo apt update && sudo apt upgrade -y
+Install Python 3 dan pip:
+
+bash
+Copy
+Edit
+sudo apt install python3 python3-pip -y
+Install beberapa dependensi yang dibutuhkan:
+
+bash
+Copy
+Edit
+sudo apt install python3-venv -y
+sudo apt install libffi-dev libssl-dev -y
+Install pipenv (optional, untuk virtual environment):
+
+bash
+Copy
+Edit
+sudo pip3 install pipenv
+Step 2: Setup Project
+Clone atau buat folder untuk proyek: Jika Anda mengclone proyek dari repository Git, gunakan perintah berikut:
+
+bash
+Copy
+Edit
+git clone <URL_REPO>
+cd <nama_folder_proyek>
+Buat dan aktifkan virtual environment:
+
+bash
+Copy
+Edit
+python3 -m venv venv
+source venv/bin/activate
+Install dependencies: Jika Anda menggunakan requirements.txt, install dengan:
+
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Jika Anda menggunakan pipenv, install dengan:
+
+bash
+Copy
+Edit
+pipenv install
+Step 3: Konfigurasi .env
+Buat file .env di direktori utama proyek Anda, dan isi dengan informasi berikut:
+
+env
+Copy
+Edit
+API_ID=your_api_id
+API_HASH=your_api_hash
+PHONE_NUMBER=your_phone_number
+BOT_TOKEN=your_bot_token
+OWNER_ID=your_owner_id
+ALLOWED_GROUP_IDS=group_id_1,group_id_2,group_id_3
+API_ID: Dapatkan dari my.telegram.org.
+API_HASH: Dapatkan dari my.telegram.org.
+PHONE_NUMBER: Nomor telepon yang Anda gunakan untuk login (hanya jika menggunakan login via nomor HP).
+BOT_TOKEN: Token bot yang Anda dapatkan dari BotFather di Telegram (hanya jika menggunakan login dengan bot).
+OWNER_ID: ID Telegram Anda (untuk admin bot).
+ALLOWED_GROUP_IDS: Daftar ID grup yang diizinkan untuk mengakses bot. Pisahkan dengan koma (,).
+Step 4: Jalankan Bot
+Login Menggunakan Nomor Telepon
+Jika Anda memilih untuk login dengan nomor telepon (pastikan Anda telah mengonfigurasi variabel PHONE_NUMBER di .env), jalankan bot menggunakan perintah berikut:
+
+bash
+Copy
+Edit
+python3 bot.py
+Bot akan meminta Anda untuk memasukkan kode verifikasi yang dikirimkan ke nomor telepon Anda.
+
+Login Menggunakan Bot Token
+Jika Anda memilih untuk login dengan token bot, pastikan Anda telah mengonfigurasi BOT_TOKEN di .env, dan jalankan bot dengan perintah berikut:
+
+bash
+Copy
+Edit
+python3 bot.py
+Bot akan langsung berjalan menggunakan token bot yang sudah Anda tentukan di file .env.
+
+Step 5: Menjalankan Bot secara Otomatis (Opsional)
+Untuk menjalankan bot secara otomatis saat sistem reboot, Anda dapat membuat systemd service.
+
+Buat file service:
+
+bash
+Copy
+Edit
+sudo nano /etc/systemd/system/telegram-bot.service
+Isi file dengan konfigurasi berikut:
+
+ini
+Copy
+Edit
+[Unit]
+Description=Telegram Bot Service
+After=network.target
+
+[Service]
+User=your_user
+WorkingDirectory=/path/to/your/project
+ExecStart=/path/to/your/project/venv/bin/python3 /path/to/your/project/bot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+Gantilah your_user dengan nama pengguna Anda di Ubuntu, dan sesuaikan /path/to/your/project dengan path proyek Anda.
+
+Reload systemd dan aktifkan service:
+
+bash
+Copy
+Edit
+sudo systemctl daemon-reload
+sudo systemctl enable telegram-bot.service
+sudo systemctl start telegram-bot.service
+Cek status service:
+
+bash
+Copy
+Edit
+sudo systemctl status telegram-bot.service
+Step 6: Troubleshooting
+Bot tidak merespons pesan: Periksa koneksi internet dan pastikan token bot atau API yang dimasukkan benar.
+Login gagal menggunakan nomor telepon: Pastikan Anda mengikuti proses verifikasi dengan benar dan pastikan nomor telepon yang digunakan sudah terdaftar di Telegram.
+
+Telegram Bot Installation Guide (Termux)
+Prerequisites
+Sebelum memulai, pastikan bahwa Anda sudah memiliki hal-hal berikut:
+
+Termux terinstal di perangkat Android Anda.
+Telegram API ID dan API Hash.
+Nomor Telepon Telegram (untuk login menggunakan nomor HP) atau Bot Token (untuk login menggunakan bot).
+File .env untuk konfigurasi.
+Step 1: Install Dependencies
+Update Termux dan install paket dasar: Buka Termux dan jalankan perintah berikut:
+
+bash
+Copy
+Edit
+pkg update && pkg upgrade -y
+Install Python dan dependensi lainnya:
+
+bash
+Copy
+Edit
+pkg install python git -y
+pkg install clang make libffi-dev libssl-dev -y
+Install pip (Python package manager):
+
+bash
+Copy
+Edit
+python -m ensurepip --upgrade
+pip install --upgrade pip
+Install virtualenv untuk lingkungan terisolasi:
+
+bash
+Copy
+Edit
+pip install virtualenv
+Step 2: Setup Project
+Clone Proyek dari GitHub: Jika Anda ingin mengclone proyek dari repository Git, jalankan:
+
+bash
+Copy
+Edit
+git clone <URL_REPO>
+cd <nama_folder_proyek>
+Buat dan aktifkan virtual environment:
+
+bash
+Copy
+Edit
+python -m venv venv
+source venv/bin/activate
+Install dependencies: Jika Anda memiliki file requirements.txt, jalankan:
+
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Atau jika Anda menggunakan pipenv, install dengan:
+
+bash
+Copy
+Edit
+pipenv install
+Step 3: Konfigurasi .env
+Buat file .env di direktori utama proyek Anda dan isi dengan informasi berikut:
+
+env
+Copy
+Edit
+API_ID=your_api_id
+API_HASH=your_api_hash
+PHONE_NUMBER=your_phone_number
+BOT_TOKEN=your_bot_token
+OWNER_ID=your_owner_id
+ALLOWED_GROUP_IDS=group_id_1,group_id_2,group_id_3
+API_ID: Dapatkan dari my.telegram.org.
+API_HASH: Dapatkan dari my.telegram.org.
+PHONE_NUMBER: Nomor telepon yang Anda gunakan untuk login (jika menggunakan login via nomor HP).
+BOT_TOKEN: Token bot yang Anda dapatkan dari BotFather di Telegram (jika menggunakan login dengan bot).
+OWNER_ID: ID Telegram Anda (untuk admin bot).
+ALLOWED_GROUP_IDS: Daftar ID grup yang diizinkan untuk mengakses bot. Pisahkan dengan koma (,).
+Step 4: Jalankan Bot
+Login Menggunakan Nomor Telepon
+Jika Anda memilih login dengan nomor telepon, pastikan Anda telah mengonfigurasi variabel PHONE_NUMBER di .env, dan jalankan bot dengan perintah berikut:
+
+bash
+Copy
+Edit
+python3 bot.py
+Bot akan meminta Anda untuk memasukkan kode verifikasi yang dikirimkan ke nomor telepon Anda.
+
+Login Menggunakan Bot Token
+Jika Anda memilih login menggunakan token bot, pastikan Anda telah mengonfigurasi BOT_TOKEN di .env, dan jalankan bot dengan perintah berikut:
+
+bash
+Copy
+Edit
+python3 bot.py
+Bot akan langsung berjalan menggunakan token bot yang sudah Anda tentukan di file .env.
+
+Step 5: Menjalankan Bot secara Otomatis (Opsional)
+Untuk menjalankan bot secara otomatis saat Termux dibuka, Anda dapat menggunakan Termux:Task atau Termux Services.
+
+Install Termux:Task (jika belum terpasang):
+
+bash
+Copy
+Edit
+pkg install termux-tools
+Buat Task untuk menjalankan bot: Pertama, buat file task dengan perintah berikut:
+
+bash
+Copy
+Edit
+nano ~/.termux/termux-task
+Isi file dengan perintah untuk menjalankan bot, misalnya:
+
+bash
+Copy
+Edit
+python3 /path/to/your/project/bot.py
+Jalankan Task secara otomatis: Anda dapat menjalankan Task di startup dengan menggunakan Termux:Task atau menjalankannya secara manual dari Termux.
+
+Step 6: Troubleshooting
+Bot tidak merespons pesan: Periksa koneksi internet dan pastikan token bot atau API yang dimasukkan benar.
+Login gagal menggunakan nomor telepon: Pastikan Anda mengikuti proses verifikasi dengan benar dan pastikan nomor telepon yang digunakan sudah terdaftar di Telegram.
