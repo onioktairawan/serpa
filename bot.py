@@ -104,6 +104,31 @@ async def respond_to_keywords(event):
     except Exception as e:
         logger.error(f"Terjadi kesalahan saat merespons kata kunci: {e}", exc_info=True)
 
+# Event handler untuk perubahan nama atau username
+@client.on(events.ChatAction)
+async def track_name_or_username_changes(event):
+    try:
+        # Hanya merespons di grup yang diizinkan
+        if event.chat.id in ALLOWED_GROUP_IDS and event.user_added:
+            user = await client.get_entity(event.user_id)
+
+            # Jika nama pengguna berubah
+            if event.user_joined or event.user_added:
+                old_username = event.old.username if hasattr(event.old, 'username') else None
+                new_username = user.username
+
+                if old_username != new_username:
+                    await event.reply(f"📢 Perubahan Pengguna:\n@{old_username or 'Tidak Ada'} berubah menjadi @{new_username or 'Tidak Ada'}.")
+
+                # Jika nama lengkap berubah
+                old_name = f"{event.old.first_name or ''} {event.old.last_name or ''}".strip() if event.old else None
+                new_name = f"{user.first_name or ''} {user.last_name or ''}".strip()
+
+                if old_name != new_name:
+                    await event.reply(f"📢 Perubahan Nama:\n'{old_name or 'Tidak Ada'}' berubah menjadi '{new_name or 'Tidak Ada'}'.")
+    except Exception as e:
+        logger.error(f"Terjadi kesalahan saat melacak perubahan nama/username: {e}", exc_info=True)
+
 # Event handler untuk perintah .rank
 @client.on(events.NewMessage(pattern=r'^\.rank$'))
 async def rank(event):
