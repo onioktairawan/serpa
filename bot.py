@@ -93,7 +93,7 @@ async def respond_to_keywords(event):
                     elif keyword == 'ser':
                         await event.reply("APA, KANGEN SAMA SERPA YA")
                     elif keyword == 'ok':
-                        await event.reply("*OK*")
+                        await event.reply("OK")
                     elif keyword == 'pc':
                         await event.reply("MINIMAL CAKEP BARU PC PC")
                     elif keyword == 'cpc':
