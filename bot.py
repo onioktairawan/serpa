@@ -109,23 +109,30 @@ async def respond_to_keywords(event):
 async def track_name_or_username_changes(event):
     try:
         # Hanya merespons di grup yang diizinkan
-        if event.chat.id in ALLOWED_GROUP_IDS and event.user_added:
-            user = await client.get_entity(event.user_id)
+        if event.chat.id in ALLOWED_GROUP_IDS:
+            if event.user_added or event.user_joined:
+                user = await client.get_entity(event.user_id)
 
-            # Jika nama pengguna berubah
-            if event.user_joined or event.user_added:
-                old_username = event.old.username if hasattr(event.old, 'username') else None
+                # Cek perubahan username
                 new_username = user.username
+                old_username = event.action_message.from_id.username if event.action_message else None
 
                 if old_username != new_username:
-                    await event.reply(f"📢 Perubahan Pengguna:\n@{old_username or 'Tidak Ada'} berubah menjadi @{new_username or 'Tidak Ada'}.")
+                    await client.send_message(
+                        event.chat.id,
+                        f"📢 **Perubahan Username**:\n@{old_username or 'Tidak Ada'} → @{new_username or 'Tidak Ada'}."
+                    )
 
-                # Jika nama lengkap berubah
-                old_name = f"{event.old.first_name or ''} {event.old.last_name or ''}".strip() if event.old else None
+                # Cek perubahan nama lengkap
+                old_name = event.action_message.from_id.first_name if event.action_message else None
                 new_name = f"{user.first_name or ''} {user.last_name or ''}".strip()
 
                 if old_name != new_name:
-                    await event.reply(f"📢 Perubahan Nama:\n'{old_name or 'Tidak Ada'}' berubah menjadi '{new_name or 'Tidak Ada'}'.")
+                    await client.send_message(
+                        event.chat.id,
+                        f"📢 **Perubahan Nama**:\n'{old_name or 'Tidak Ada'}' → '{new_name or 'Tidak Ada'}'."
+                    )
+
     except Exception as e:
         logger.error(f"Terjadi kesalahan saat melacak perubahan nama/username: {e}", exc_info=True)
 
